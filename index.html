@@ -1,0 +1,222 @@
+<!doctype html>
+
+<head>
+   <script data-require="d3@3.5.3" data-semver="3.5.3" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.js"></script>
+   <title>Region Explorer</title>
+   <link rel="stylesheet" type="text/css" href="style.css">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">s
+   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <script src="d3.min.js"></script>
+   <script src="d3.parcoords.js"></script>
+   <script src="divgrid.js"></script>
+ </head>
+
+<body style="background-color: #0d0d0d;font-size: 14px;font-family: Ubuntu, Tahoma, Helvetica, sans-serif;margin: 0px auto 20px;width: 1400px;line-height: 1.45em;color:#2f3640;">
+<h1 id="explorer" style="color:#ff7f00;">City Explorer</h1>
+<div id="headers"><h3 id="owners" style="color:#ff7f00;">Business Owners</h3><h3 id="people" style="color:#ff7f00;">Families</h3></div>
+<div id="clear"></div>
+
+<div id="example" class="parcoords"><div id='tooltip' style='position:absolute;background: rgba(255, 255, 255,1);padding:5px;border-radius:4px;display:none;color:black;z-index:1;width:200px;font-size: 12px;'></div></div>
+<!-- <div style="padding-top:10px;"><h3>Search  <input type="text" id="search" placeholder="Search Foods..." style="width:400px"></input><h3></div> -->
+<div id="grid"></div>
+<div class="controls">
+  <h3 style="color:#ff7f00;">Controls</h3>
+  <p style="color:#fff;">
+    <strong>Brush</strong>: Drag vertically along an axis.<br/>
+    <strong>Remove Brush</strong>: Tap the axis background.<br/>
+    <strong>Invert Axis</strong>: Tap an axis label.<br/>
+    <strong>Label Description</strong>: Mouse over on a label.<br/>
+    <strong>Open Modal</strong>: Tap a row of the table.<br/>
+    <strong>Close Modal</strong>: Tap the background.<br/>
+  </p>
+  <!-- <ul >
+    <li><strong>Brush</strong>: Drag vertically along an axis.</li><br/>
+    <li><strong>Remove Brush</strong>: Tap the axis background.</li>
+    <li><strong>Invert Axis</strong>: Tap an axis label.<br/></li>
+    <li><strong>Label Description</strong>: Mouse over on a label.<br/></li>
+  </ul> -->
+</div>
+<div id='description'>
+  <h3 style="color:#ff7f00;display:block;">Description</h3>
+  <p >A multidimensional explorer of city data from Statistics Canada. <br/><br/>
+  The polylines display cities of Canada and vertical lines represent various factors of each city.<br/><br/>
+  Factors on the x-axis are arranged from left to right with those closer to the left deemed to
+  be specifically <br/> important for the enterprising user group while those farther to the right are factors
+  arbitrarily selected to <br/>be more significant for families and newcomers whose goal is to primarily
+  move into a community with high <br/>quality of living. Factors in the middle portion are vital variables
+   both user groups consider when moving to <br/>a new community. </p>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade modal-lg" id="myModal" role="dialog" style="width:100%;height:100%;margin:0 auto;border-radius:5px;">
+  <div class="modal-dialog modal-lg" style="width:80%;height:100%">
+
+    <!-- Modal content-->
+    <div class="modal-content modal-lg" style="width:100%;height:100%">
+      <div class="modal-header" style="color:#ff7f00;">
+        <button type="button" class="close" data-dismiss="modal" style="color:white;background-color:#0d0d0d">&times;</button>
+        <h4 class="modal-title" style="color:#ff7f00;"></h4>
+      </div>
+      <div class="modal-body" style="width:100%;height:95%;">
+        <!-- <p>Some text in the modal.</p> -->
+        <iframe target='_top' src="" style="width:100%;height:100%;" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="modal-body">
+      <iframe src="" style="zoom:0.60" width="99.6%" target="_top" height="250" frameborder="0"></iframe>
+	</div> -->
+
+<script id="brushing">// quantitative colour scale
+var colorgen = d3.scale.ordinal()
+   .range(["#d02f42","#f16741","#fba050","#fbc337",
+           "#e3f28c","#9ad491","#9ad491","#3481b2"]);
+
+var color = function(d) { return colorgen(d.Province); };
+
+var parcoords = d3.parcoords()("#example")
+  .color(color)
+  .alpha(0.3);
+
+// load csv file and create the chart
+d3.csv('Canada.csv', function(data) {
+     parcoords
+    .data(data)
+    .render()
+    .brushMode("1D-axes");  // enable brushing
+
+  // make Modal
+  // Get the modal
+  var modal = document.getElementById('myModal');
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // create data table, row hover highlighting
+  var grid = d3.divgrid();
+  d3.select("#grid")
+    .datum(data)
+    .call(grid)
+    .selectAll(".row")
+    .attr('data-toggle',"modal")
+    .on({
+      "mouseover": function(d) { parcoords.highlight([d]) },
+      "mouseout": parcoords.unhighlight,
+      "click": function(d) {
+        let h = d3.select('#myModal')
+        h.append("rect")
+	                .style("stroke", "black")
+	                .style("stroke-width", "4")
+	                .style("fill", "none")
+	                .style("stroke-linecap", "round")
+	                .style("stroke-linejoin", "round")
+	                .attr("class", "infoLine info")
+	                .datum(d)
+        $("#myModal").modal()
+        }
+    });
+
+  // $('#myModal').on('shown.bs.modal', function () { $('#myModal').html(yourdata); })
+  $('#myModal').on('show.bs.modal', function(d) {
+      var d = d3.select(".info").data().pop();
+      var frameSrc = "http://www.townfolio.co/" + d.region + "/" + d.name;
+      $('iframe').attr("src", frameSrc);
+      // let modalTitle = d3.selectAll("h4.modal-title");
+      // modalTitle.text("test");
+      // console.log("HERE")
+      // console.log(d)
+      let modalBody = d3.selectAll(".modal-body");
+      let modalHeader = d3.selectAll(".modal-header");
+      modalHeader.html(d.name + ", "+ d.region)
+      .attr("fill", "#ff7f00")
+      .attr("color", "#ff7f00");
+      // <iframe src="" style="zoom:0.60" width="99.6%" height="250" frameborder="0"></iframe>
+      // console.log(d, "operator: " + d.Operator + "   Country: " + d.Country);
+  })
+  // $('.modal').on('shown.bs.modal',function(){      //correct here use 'shown.bs.modal' event which comes in bootstrap3
+  //   $(this).find('iframe').attr('src','http://www.google.com')
+  // })
+
+    $(function () {
+    // Delegating to `document` just in case.
+    $(document).on("hidden.bs.modal", "#myModal", function () {
+      $(this).find(".info").html(""); // Just clear the contents.
+      $(this).find(".info").remove(); // Remove from DOM.
+    });
+  });
+
+//d.slice(0,11)
+  // update data table on brush event
+  parcoords.on("brush", function(d) {
+    d3.select("#grid")
+      .datum(d)
+      .call(grid)
+      .selectAll(".row")
+      .on({
+        "mouseover": function(d) { parcoords.highlight([d]) },
+        "mouseout": parcoords.unhighlight,
+        "click": function(d) {
+          let h = d3.select('#myModal')
+          h.append("rect")
+  	                .style("stroke", "black")
+  	                .style("stroke-width", "4")
+  	                .style("fill", "none")
+  	                .style("stroke-linecap", "round")
+  	                .style("stroke-linejoin", "round")
+  	                .attr("class", "infoLine info")
+  	                .datum(d)
+          $("#myModal").modal()
+          }
+      });
+  });
+  var selected;
+  //
+  // onFilter();
+  //
+  // d3.select('#search').on('keyup', onFilter);
+
+  // function onFilter(){
+  //
+  //   var filterText = d3.select('#search').property('value');
+  //
+  //   filteredData = data;
+  //   if (filterText !== ""){
+  //     var filteredData = data.filter(function(d){
+  //       return (d.name.indexOf(filterText) === 0);
+  //     });
+  //   }
+  //
+  //   // d3.select("#grid")
+  //   //   .datum(filteredData)
+  //   //   .call(grid)
+  //   //   .selectAll(".row")
+  //   //   .on({
+  //   //     "mouseover": function(d) { parcoords.highlight([d]) },
+  //   //     "mouseout": parcoords.unhighlight
+  //   //   });
+  //
+  //     d3.select('#grid').html(
+  //       filteredData.map(function(d){
+  //         return d.ID;
+  //       }).join("<br/>")
+  //     );
+  //
+  //   }
+  parcoords.on("brush", function(d) {
+    d3.select("#grid")
+      .datum(d)
+      .call(grid)
+      .selectAll(".row")
+      .on({
+        "mouseover": function(d) { parcoords.highlight([d]) },
+        "mouseout": parcoords.unhighlight
+      });
+  });
+ });
+// d3.select("#search").on("keyup", brush);
+</script>
+</body>

@@ -1,0 +1,184 @@
+
+body {
+  font-size: 14px;
+  font-family: Ubuntu, Tahoma, Helvetica, sans-serif;
+  margin: 20px auto 20px;
+  width: 1400px;
+  line-height: 1.45em;
+  background-color: #0d0d0d;
+  color:#2f3640;
+  letter-spacing: 0.09em;
+}
+ul li{
+  display:inline-block;
+  margin-right:50px;
+  color: #fff;
+}
+ul{
+    list-style: circle;
+      padding:0;
+}
+h1#explorer{
+  margin-left: 60px;
+}
+h3#people{
+  float:right;
+  margin-right: 45px;
+}
+h3#owners{
+  margin-left: 60px;
+  float:left;
+}
+div#header{
+  display:block;
+  width:100%;
+}
+div#clear{
+  clear:both;
+}
+h3:after{
+  clear: both;
+}
+.dark {
+  background: #fff;
+}
+#example {
+  min-height: 450px;
+  margin: 5px 0 10px 0px;
+}
+.float {
+  float: left;
+}
+.centered {
+  text-align: center;
+}
+.hide {
+  display: none;
+}
+input {
+  font-size: 16px;
+}
+.controls{
+  float:left;
+  width:35%;
+  margin:0px 50px 10px 0px;
+}
+.controls p{
+  line-height: 2em;
+}
+#description{
+    float:left;
+    width:60%;
+}
+#description p{
+  color:#fff;
+  display:block;
+}
+  #grid { height: 310px; width:100%; overflow-y: scroll;overflow-x: hidden;margin-top:40px;padding-left:15px;}
+  .row, .header { clear: left; font-size: 14px; line-height: 24px; height: 30px; color:#e6e6e6;padding-left:10px;}
+  .row:nth-child(even) { background: rgba(230, 247, 255,0.2); }
+  .header { font-weight: bold;height: 40px;line-height: 14px;text-align: left;margin-left: -20px;}
+  .cell { float: left; overflow: hidden; white-space: nowrap; width: 179px; height: 18px;padding-left:20px;}
+  .col-0 { width: 140px; }
+  .col-1 { width: 85px; }
+  .col-3 { width: 90px; }
+  .col-6 { width: 160px; }
+  .col-7 { width: 181px; }
+  .row:hover{
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+/* parcoords styles */
+.parcoords > svg, .parcoords > canvas {
+  font: 14px Ubuntu, Tahoma, Helvetica, sans-serif;
+  position: absolute;
+  fill:#fff;
+    letter-spacing: 0.1em;
+}
+.parcoords > canvas {
+  pointer-events: none;
+}
+
+.parcoords text.label {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 0.5em;
+}
+
+.parcoords rect.background {
+  fill: transparent;
+}
+.parcoords rect.background:hover {
+  fill: rgba(255, 255, 255,0.3);
+}
+.parcoords .resize rect {
+  fill: rgba(255,255,255,0.1);
+}
+.parcoords rect.extent {
+  fill: rgba(255,255,255,0.25);
+  stroke: rgba(255, 255, 255,0.6);
+}
+.parcoords .axis line, .parcoords .axis path {
+  fill: none;
+  stroke: #b3b3b3;
+  shape-rendering: crispEdges;
+}
+.parcoords canvas {
+  opacity: 1;
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+}
+.parcoords canvas.faded {
+  opacity: 0.25;
+}
+.parcoords {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+
+.modal-header, h4.modal-title, .close {
+    /* color:white !important; */
+    text-align: center;
+    font-size: 30px;
+}
+.modal-footer {
+    background-color: #f9f9f9;
+}
+
+.modal {
+  position: absolute;
+  left:25%;
+  top: 25%;
+  background:black;
+  opacity:0.8;
+  /* transform: translate(1%, 5%); */
+}
+
+.modal-dialog,
+.modal-content {
+    /* 80% of window height */
+    /* width: 1300px;
+    height: 89%; */
+    background:yellow;
+    border-radius:5px;
+    /*margin: auto;*/
+}
+.modal-body {
+    /* 100% = dialog height, 120px = header + footer */
+    /* height: calc(100% - 30px);
+    width: 100%; */
+    overflow-y: auto;
+    margin: auto;
+}
+
+svg{
+border-bottom: 1px solid #fff;
+}
