@@ -19,3 +19,5 @@ Invert Axis: Tap an axis label.\
 Label Description: Mouse over on a label.\
 Open Modal: Tap a row of the table.\
 Close Modal: Tap the background.
+
+<img width="1069" alt="Capture2" src="https://user-images.githubusercontent.com/32202790/61433963-8690e580-a8e9-11e9-9e1b-a6dc4e7fa8a9.PNG">
